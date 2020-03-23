@@ -19,6 +19,8 @@ $ pip install diff-priv-laplace-python
 
 ## Documentation
 
+For a complete API documentation checkout the [python docs][2].
+
 ## Examples
 
 ### Create an instance with a defined privacy budget
@@ -108,11 +110,12 @@ anonymized = anonymizer.anonymize_variance(value, lower, upper, n)
 
 ## Known Issues
 
-Please open an [issue][2] for anything not on this list!
+Please open an [issue][3] for anything not on this list!
 
 ## License
-[MIT][3]
+[MIT][4]
 
 [1]: https://en.wikipedia.org/wiki/Differential_privacy#The_Laplace_mechanism
-[2]: https://github.com/aleph-research/diff-priv-laplace-python/issues/new
-[3]: https://github.com/plaid/aleph-research/diff-priv-laplace-python/blob/master/LICENSE
+[2]: https://aleph-research.github.io/diff-priv-laplace-python/
+[3]: https://github.com/aleph-research/diff-priv-laplace-python/issues/new
+[4]: https://github.com/plaid/aleph-research/diff-priv-laplace-python/blob/master/LICENSE
