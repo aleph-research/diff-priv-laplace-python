@@ -1,8 +1,6 @@
-from diffpriv_laplace.global_sensitivity.counting import CountingGlobalSensitivity
-from diffpriv_laplace.anonymizer.base import DiffPrivAnonymizer
+from diffpriv_laplace.anonymizer.count import DiffPrivCountAnonymizer
 
 
-class DiffPrivCountingAnonymizer(DiffPrivAnonymizer):
+class DiffPrivCountingAnonymizer(DiffPrivCountAnonymizer):
     def __init__(self, epsilon):
-        gs = CountingGlobalSensitivity()
-        super().__init__(gs, epsilon)
+        super().__init__(epsilon)

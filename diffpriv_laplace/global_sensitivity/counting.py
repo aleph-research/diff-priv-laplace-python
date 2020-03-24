@@ -1,6 +1,6 @@
-from diffpriv_laplace.global_sensitivity.base import GlobalSensitivity
+from diffpriv_laplace.global_sensitivity.count import CountGlobalSensitivity
 
 
-class CountingGlobalSensitivity(GlobalSensitivity):
+class CountingGlobalSensitivity(CountGlobalSensitivity):
     def __init__(self):
-        super().__init__(1)
+        super().__init__()

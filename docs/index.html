@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Differential Privacy Laplace Documentation &#8212; Differential Privacy Laplace Python 1.0.1 documentation</title>
+    <title>Differential Privacy Laplace Documentation &#8212; Differential Privacy Laplace Python 1.0.2 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1.0.1',
+        VERSION:     '1.0.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  false,
@@ -123,6 +123,55 @@
 </dd></dl>
 
 <dl class="method">
+<dt id="diffpriv_laplace.DiffPrivLaplaceMechanism.anonymize_max">
+<code class="descname">anonymize_max</code><span class="sig-paren">(</span><em>value</em>, <em>size=None</em><span class="sig-paren">)</span><a class="headerlink" href="#diffpriv_laplace.DiffPrivLaplaceMechanism.anonymize_max" title="Permalink to this definition">¶</a></dt>
+<dd><p>Anonymizes one or many max value(s).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>value</strong> (<em>float|</em><em>[</em><em>float</em><em>]</em><em></em>) &#8211; The max value(s).</li>
+<li><strong></strong><strong>[</strong><strong>size</strong><strong>]</strong><strong></strong> (<em>int|tuple</em><em>(</em><em>int</em><em>)</em><em></em>) &#8211; Output shape.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The anonymized max value(s).</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float|[float]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="diffpriv_laplace.DiffPrivLaplaceMechanism.anonymize_max_with_budget">
+<em class="property">classmethod </em><code class="descname">anonymize_max_with_budget</code><span class="sig-paren">(</span><em>value</em>, <em>epsilon</em>, <em>size=None</em><span class="sig-paren">)</span><a class="headerlink" href="#diffpriv_laplace.DiffPrivLaplaceMechanism.anonymize_max_with_budget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Anonymizes one or many max value(s) for a given privacy budget.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>value</strong> (<em>float|</em><em>[</em><em>float</em><em>]</em><em></em>) &#8211; The max value(s).</li>
+<li><strong>epsilon</strong> (<em>float</em>) &#8211; The privacy budget.</li>
+<li><strong></strong><strong>[</strong><strong>size</strong><strong>]</strong><strong></strong> (<em>int|tuple</em><em>(</em><em>int</em><em>)</em><em></em>) &#8211; Output shape.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The anonymized max value(s).</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float|[float]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="diffpriv_laplace.DiffPrivLaplaceMechanism.anonymize_mean">
 <code class="descname">anonymize_mean</code><span class="sig-paren">(</span><em>value</em>, <em>lower</em>, <em>upper</em>, <em>n</em>, <em>size=None</em><span class="sig-paren">)</span><a class="headerlink" href="#diffpriv_laplace.DiffPrivLaplaceMechanism.anonymize_mean" title="Permalink to this definition">¶</a></dt>
 <dd><p>Anonymizes one or many mean value(s).</p>
@@ -178,6 +227,104 @@
 </dd></dl>
 
 <dl class="method">
+<dt id="diffpriv_laplace.DiffPrivLaplaceMechanism.anonymize_median">
+<code class="descname">anonymize_median</code><span class="sig-paren">(</span><em>value</em>, <em>size=None</em><span class="sig-paren">)</span><a class="headerlink" href="#diffpriv_laplace.DiffPrivLaplaceMechanism.anonymize_median" title="Permalink to this definition">¶</a></dt>
+<dd><p>Anonymizes one or many ,median value(s).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>value</strong> (<em>float|</em><em>[</em><em>float</em><em>]</em><em></em>) &#8211; The median value(s).</li>
+<li><strong></strong><strong>[</strong><strong>size</strong><strong>]</strong><strong></strong> (<em>int|tuple</em><em>(</em><em>int</em><em>)</em><em></em>) &#8211; Output shape.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The anonymized median value(s).</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float|[float]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="diffpriv_laplace.DiffPrivLaplaceMechanism.anonymize_median_with_budget">
+<em class="property">classmethod </em><code class="descname">anonymize_median_with_budget</code><span class="sig-paren">(</span><em>value</em>, <em>epsilon</em>, <em>size=None</em><span class="sig-paren">)</span><a class="headerlink" href="#diffpriv_laplace.DiffPrivLaplaceMechanism.anonymize_median_with_budget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Anonymizes one or many median value(s) for a given privacy budget.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>value</strong> (<em>float|</em><em>[</em><em>float</em><em>]</em><em></em>) &#8211; The median value(s).</li>
+<li><strong>epsilon</strong> (<em>float</em>) &#8211; The privacy budget.</li>
+<li><strong></strong><strong>[</strong><strong>size</strong><strong>]</strong><strong></strong> (<em>int|tuple</em><em>(</em><em>int</em><em>)</em><em></em>) &#8211; Output shape.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The anonymized median value(s).</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float|[float]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="diffpriv_laplace.DiffPrivLaplaceMechanism.anonymize_min">
+<code class="descname">anonymize_min</code><span class="sig-paren">(</span><em>value</em>, <em>size=None</em><span class="sig-paren">)</span><a class="headerlink" href="#diffpriv_laplace.DiffPrivLaplaceMechanism.anonymize_min" title="Permalink to this definition">¶</a></dt>
+<dd><p>Anonymizes one or many min value(s).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>value</strong> (<em>float|</em><em>[</em><em>float</em><em>]</em><em></em>) &#8211; The min value(s).</li>
+<li><strong></strong><strong>[</strong><strong>size</strong><strong>]</strong><strong></strong> (<em>int|tuple</em><em>(</em><em>int</em><em>)</em><em></em>) &#8211; Output shape.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The anonymized min value(s).</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float|[float]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="diffpriv_laplace.DiffPrivLaplaceMechanism.anonymize_min_with_budget">
+<em class="property">classmethod </em><code class="descname">anonymize_min_with_budget</code><span class="sig-paren">(</span><em>value</em>, <em>epsilon</em>, <em>size=None</em><span class="sig-paren">)</span><a class="headerlink" href="#diffpriv_laplace.DiffPrivLaplaceMechanism.anonymize_min_with_budget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Anonymizes one or many min value(s) for a given privacy budget.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>value</strong> (<em>float|</em><em>[</em><em>float</em><em>]</em><em></em>) &#8211; The min value(s).</li>
+<li><strong>epsilon</strong> (<em>float</em>) &#8211; The privacy budget.</li>
+<li><strong></strong><strong>[</strong><strong>size</strong><strong>]</strong><strong></strong> (<em>int|tuple</em><em>(</em><em>int</em><em>)</em><em></em>) &#8211; Output shape.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The anonymized min value(s).</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float|[float]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="diffpriv_laplace.DiffPrivLaplaceMechanism.anonymize_proportion">
 <code class="descname">anonymize_proportion</code><span class="sig-paren">(</span><em>value</em>, <em>n</em>, <em>size=None</em><span class="sig-paren">)</span><a class="headerlink" href="#diffpriv_laplace.DiffPrivLaplaceMechanism.anonymize_proportion" title="Permalink to this definition">¶</a></dt>
 <dd><p>Anonymizes one or many proportion value(s).</p>
@@ -219,6 +366,59 @@
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The anonymized proportion(s).</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float|[float]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="diffpriv_laplace.DiffPrivLaplaceMechanism.anonymize_sum">
+<code class="descname">anonymize_sum</code><span class="sig-paren">(</span><em>value</em>, <em>lower</em>, <em>upper</em>, <em>size=None</em><span class="sig-paren">)</span><a class="headerlink" href="#diffpriv_laplace.DiffPrivLaplaceMechanism.anonymize_sum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Anonymizes one or many sum value(s).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>value</strong> (<em>float|</em><em>[</em><em>float</em><em>]</em><em></em>) &#8211; The sum value(s).</li>
+<li><strong>lower</strong> (<em>float</em>) &#8211; The lower bound of the data.</li>
+<li><strong>upper</strong> (<em>float</em>) &#8211; The upper bound of the data.</li>
+<li><strong></strong><strong>[</strong><strong>size</strong><strong>]</strong><strong></strong> (<em>int|tuple</em><em>(</em><em>int</em><em>)</em><em></em>) &#8211; Output shape.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The anonymized sum value(s).</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float|[float]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="diffpriv_laplace.DiffPrivLaplaceMechanism.anonymize_sum_with_budget">
+<em class="property">classmethod </em><code class="descname">anonymize_sum_with_budget</code><span class="sig-paren">(</span><em>value</em>, <em>lower</em>, <em>upper</em>, <em>epsilon</em>, <em>size=None</em><span class="sig-paren">)</span><a class="headerlink" href="#diffpriv_laplace.DiffPrivLaplaceMechanism.anonymize_sum_with_budget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Anonymizes one or many sum value(s) for a given privacy budget.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>value</strong> (<em>float|</em><em>[</em><em>float</em><em>]</em><em></em>) &#8211; The sum value(s).</li>
+<li><strong>lower</strong> (<em>float</em>) &#8211; The lower bound of the data.</li>
+<li><strong>upper</strong> (<em>float</em>) &#8211; The upper bound of the data.</li>
+<li><strong>epsilon</strong> (<em>float</em>) &#8211; The privacy budget.</li>
+<li><strong></strong><strong>[</strong><strong>size</strong><strong>]</strong><strong></strong> (<em>int|tuple</em><em>(</em><em>int</em><em>)</em><em></em>) &#8211; Output shape.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The anonymized sum value(s).</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float|[float]</p>
@@ -284,6 +484,24 @@
 </dd></dl>
 
 <dl class="classmethod">
+<dt id="diffpriv_laplace.DiffPrivLaplaceMechanism.create_count_anonymizer">
+<em class="property">classmethod </em><code class="descname">create_count_anonymizer</code><span class="sig-paren">(</span><em>epsilon</em><span class="sig-paren">)</span><a class="headerlink" href="#diffpriv_laplace.DiffPrivLaplaceMechanism.create_count_anonymizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a count anonymizer instance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>epsilon</strong> (<em>float</em>) &#8211; The privacy budget.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A count anonymizer with the provided privacy budget.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><cite>DiffPrivCountAnonymizer</cite></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
 <dt id="diffpriv_laplace.DiffPrivLaplaceMechanism.create_counting_anonymizer">
 <em class="property">classmethod </em><code class="descname">create_counting_anonymizer</code><span class="sig-paren">(</span><em>epsilon</em><span class="sig-paren">)</span><a class="headerlink" href="#diffpriv_laplace.DiffPrivLaplaceMechanism.create_counting_anonymizer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a counting anonymizer instance.</p>
@@ -296,6 +514,24 @@
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A counting anonymizer with the provided privacy budget.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><cite>DiffPrivCountingAnonymizer</cite></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="diffpriv_laplace.DiffPrivLaplaceMechanism.create_max_anonymizer">
+<em class="property">classmethod </em><code class="descname">create_max_anonymizer</code><span class="sig-paren">(</span><em>epsilon</em><span class="sig-paren">)</span><a class="headerlink" href="#diffpriv_laplace.DiffPrivLaplaceMechanism.create_max_anonymizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a max anonymizer instance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>epsilon</strong> (<em>float</em>) &#8211; The privacy budget.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A max anonymizer with the provided privacy budget.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><cite>DiffPrivMaxAnonymizer</cite></td>
 </tr>
 </tbody>
 </table>
@@ -328,6 +564,42 @@
 </dd></dl>
 
 <dl class="classmethod">
+<dt id="diffpriv_laplace.DiffPrivLaplaceMechanism.create_median_anonymizer">
+<em class="property">classmethod </em><code class="descname">create_median_anonymizer</code><span class="sig-paren">(</span><em>epsilon</em><span class="sig-paren">)</span><a class="headerlink" href="#diffpriv_laplace.DiffPrivLaplaceMechanism.create_median_anonymizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a median anonymizer instance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>epsilon</strong> (<em>float</em>) &#8211; The privacy budget.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A median anonymizer with the provided privacy budget.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><cite>DiffPrivMedianAnonymizer</cite></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="diffpriv_laplace.DiffPrivLaplaceMechanism.create_min_anonymizer">
+<em class="property">classmethod </em><code class="descname">create_min_anonymizer</code><span class="sig-paren">(</span><em>epsilon</em><span class="sig-paren">)</span><a class="headerlink" href="#diffpriv_laplace.DiffPrivLaplaceMechanism.create_min_anonymizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a min anonymizer instance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>epsilon</strong> (<em>float</em>) &#8211; The privacy budget.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A min anonymizer with the provided privacy budget.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><cite>DiffPrivMinAnonymizer</cite></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
 <dt id="diffpriv_laplace.DiffPrivLaplaceMechanism.create_proportion_anonymizer">
 <em class="property">classmethod </em><code class="descname">create_proportion_anonymizer</code><span class="sig-paren">(</span><em>epsilon</em>, <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#diffpriv_laplace.DiffPrivLaplaceMechanism.create_proportion_anonymizer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a proportion anonymizer instance.</p>
@@ -345,6 +617,31 @@
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><cite>DiffPrivProportionAnonymizer</cite></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="diffpriv_laplace.DiffPrivLaplaceMechanism.create_sum_anonymizer">
+<em class="property">classmethod </em><code class="descname">create_sum_anonymizer</code><span class="sig-paren">(</span><em>epsilon</em>, <em>lower</em>, <em>upper</em><span class="sig-paren">)</span><a class="headerlink" href="#diffpriv_laplace.DiffPrivLaplaceMechanism.create_sum_anonymizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a sum anonymizer instance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>epsilon</strong> (<em>float</em>) &#8211; The privacy budget.</li>
+<li><strong>lower</strong> (<em>float</em>) &#8211; The lower bound of the data.</li>
+<li><strong>upper</strong> (<em>float</em>) &#8211; The upper bound of the data.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A sum anonymizer with the provided privacy budget.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><cite>DiffPrivSumAnonymizer</cite></p>
 </td>
 </tr>
 </tbody>
