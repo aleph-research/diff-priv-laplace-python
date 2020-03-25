@@ -24,7 +24,7 @@ class DiffPrivAnonymizerType(Enum):
 
 class DiffPrivLaplaceMechanism(object):
     """
-    The differential privacy Laplace mechanism.
+    Differential privacy Laplace mechanism.
     """
 
     @classmethod
@@ -223,16 +223,16 @@ class DiffPrivLaplaceMechanism(object):
 
         Parameters
         ----------
-        value : float|[float]
+        value : float|list|ndarray
             The count value(s).
         epsilon : float
             The privacy budget.
-        [size] : int|tuple(int)
+        [size] : int|tuple
             Output shape.
 
         Returns
         -------
-        float|[float]
+        float|list|ndarray
             The anonymized count(s).
 
         """
@@ -247,16 +247,16 @@ class DiffPrivLaplaceMechanism(object):
 
         Parameters
         ----------
-        value : float|[float]
+        value : float|list|ndarray
             The min value(s).
         epsilon : float
             The privacy budget.
-        [size] : int|tuple(int)
+        [size] : int|tuple
             Output shape.
 
         Returns
         -------
-        float|[float]
+        float|list|ndarray
             The anonymized min value(s).
 
         """
@@ -271,16 +271,16 @@ class DiffPrivLaplaceMechanism(object):
 
         Parameters
         ----------
-        value : float|[float]
+        value : float|list|ndarray
             The max value(s).
         epsilon : float
             The privacy budget.
-        [size] : int|tuple(int)
+        [size] : int|tuple
             Output shape.
 
         Returns
         -------
-        float|[float]
+        float|list|ndarray
             The anonymized max value(s).
 
         """
@@ -295,16 +295,16 @@ class DiffPrivLaplaceMechanism(object):
 
         Parameters
         ----------
-        value : float|[float]
+        value : float|list|ndarray
             The median value(s).
         epsilon : float
             The privacy budget.
-        [size] : int|tuple(int)
+        [size] : int|tuple
             Output shape.
 
         Returns
         -------
-        float|[float]
+        float|list|ndarray
             The anonymized median value(s).
 
         """
@@ -319,18 +319,18 @@ class DiffPrivLaplaceMechanism(object):
 
         Parameters
         ----------
-        value : float|[float]
+        value : float|list|ndarray
             The proportion value(s).
         n : float
             The total number of observations.
         epsilon : float
             The privacy budget.
-        [size] : int|tuple(int)
+        [size] : int|tuple
             Output shape.
 
         Returns
         -------
-        float|[float]
+        float|list|ndarray
             The anonymized proportion(s).
 
         """
@@ -345,7 +345,7 @@ class DiffPrivLaplaceMechanism(object):
 
         Parameters
         ----------
-        value : float|[float]
+        value : float|list|ndarray
             The sum value(s).
         lower : float
             The lower bound of the data.
@@ -353,12 +353,12 @@ class DiffPrivLaplaceMechanism(object):
             The upper bound of the data.
         epsilon : float
             The privacy budget.
-        [size] : int|tuple(int)
+        [size] : int|tuple
             Output shape.
 
         Returns
         -------
-        float|[float]
+        float|list|ndarray
             The anonymized sum value(s).
 
         """
@@ -373,7 +373,7 @@ class DiffPrivLaplaceMechanism(object):
 
         Parameters
         ----------
-        value : float|[float]
+        value : float|list|ndarray
             The mean value(s).
         lower : float
             The lower bound of the data.
@@ -383,12 +383,12 @@ class DiffPrivLaplaceMechanism(object):
             The total number of observations.
         epsilon : float
             The privacy budget.
-        [size] : int|tuple(int)
+        [size] : int|tuple
             Output shape.
 
         Returns
         -------
-        float|[float]
+        float|list|ndarray
             The anonymized mean(s).
 
         """
@@ -403,7 +403,7 @@ class DiffPrivLaplaceMechanism(object):
 
         Parameters
         ----------
-        value : float|[float]
+        value : float|list|ndarray
             The variance value(s).
         lower : float
             The lower bound of the data.
@@ -413,12 +413,12 @@ class DiffPrivLaplaceMechanism(object):
             The total number of observations.
         epsilon : float
             The privacy budget.
-        [size] : int|tuple(int)
+        [size] : int|tuple
             Output shape.
 
         Returns
         -------
-        float|[float]
+        float|list|ndarray
             The anonymized variance(s).
 
         """
@@ -458,14 +458,14 @@ class DiffPrivLaplaceMechanism(object):
 
         Parameters
         ----------
-        value : float|[float]
+        value : float|list|ndarray
             The count value(s).
-        [size] : int|tuple(int)
+        [size] : int|tuple
             Output shape.
 
         Returns
         -------
-        float|[float]
+        float|list|ndarray
             The anonymized count(s).
 
         """
@@ -480,14 +480,14 @@ class DiffPrivLaplaceMechanism(object):
 
         Parameters
         ----------
-        value : float|[float]
+        value : float|list|ndarray
             The min value(s).
-        [size] : int|tuple(int)
+        [size] : int|tuple
             Output shape.
 
         Returns
         -------
-        float|[float]
+        float|list|ndarray
             The anonymized min value(s).
 
         """
@@ -502,14 +502,14 @@ class DiffPrivLaplaceMechanism(object):
 
         Parameters
         ----------
-        value : float|[float]
+        value : float|list|ndarray
             The max value(s).
-        [size] : int|tuple(int)
+        [size] : int|tuple
             Output shape.
 
         Returns
         -------
-        float|[float]
+        float|list|ndarray
             The anonymized max value(s).
 
         """
@@ -524,14 +524,14 @@ class DiffPrivLaplaceMechanism(object):
 
         Parameters
         ----------
-        value : float|[float]
+        value : float|list|ndarray
             The median value(s).
-        [size] : int|tuple(int)
+        [size] : int|tuple
             Output shape.
 
         Returns
         -------
-        float|[float]
+        float|list|ndarray
             The anonymized median value(s).
 
         """
@@ -546,16 +546,16 @@ class DiffPrivLaplaceMechanism(object):
 
         Parameters
         ----------
-        value : float|[float]
+        value : float|list|ndarray
             The proportion value(s).
         n : float
             The total number of observations.
-        [size] : int|tuple(int)
+        [size] : int|tuple
             Output shape.
 
         Returns
         -------
-        float|[float]
+        float|list|ndarray
             The anonymized proportion(s).
 
         """
@@ -570,18 +570,18 @@ class DiffPrivLaplaceMechanism(object):
 
         Parameters
         ----------
-        value : float|[float]
+        value : float|list|ndarray
             The sum value(s).
         lower : float
             The lower bound of the data.
         upper : float
             The upper bound of the data.
-        [size] : int|tuple(int)
+        [size] : int|tuple
             Output shape.
 
         Returns
         -------
-        float|[float]
+        float|list|ndarray
             The anonymized sum value(s).
 
         """
@@ -596,7 +596,7 @@ class DiffPrivLaplaceMechanism(object):
 
         Parameters
         ----------
-        value : float|[float]
+        value : float|list|ndarray
             The mean value(s).
         lower : float
             The lower bound of the data.
@@ -604,12 +604,12 @@ class DiffPrivLaplaceMechanism(object):
             The upper bound of the data.
         n : float
             The total number of observations.
-        [size] : int|tuple(int)
+        [size] : int|tuple
             Output shape.
 
         Returns
         -------
-        float|[float]
+        float|list|ndarray
             The anonymized mean(s).
 
         """
@@ -624,7 +624,7 @@ class DiffPrivLaplaceMechanism(object):
 
         Parameters
         ----------
-        value : float|[float]
+        value : float|list|ndarray
             The variance value(s).
         lower : float
             The lower bound of the data.
@@ -632,12 +632,12 @@ class DiffPrivLaplaceMechanism(object):
             The upper bound of the data.
         n : float
             The total number of observations.
-        [size] : int|tuple(int)
+        [size] : int|tuple
             Output shape.
 
         Returns
         -------
-        float|[float]
+        float|list|ndarray
             The anonymized variance(s).
 
         """
