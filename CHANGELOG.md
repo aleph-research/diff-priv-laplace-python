@@ -1,3 +1,7 @@
+### 1.0.4
+
+- Added sequential (`DiffPrivSequentialStatisticsQuery`) and parallel (`DiffPrivParallelStatisticsQuery`) composition query functionality.
+
 ### 1.0.3
 
 - Added support for calculating data anonymized statistics through `DiffPrivStatistics`.

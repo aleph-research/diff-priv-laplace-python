@@ -8,7 +8,12 @@ Implementation of [differential privacy][1] value anonymization using [Laplace m
 - [diff-priv-laplace-python](#diff-priv-laplace-python)
   * [Install](#install)
   * [Documentation](#documentation)
+    + [Privacy budget](#privacy-budget)
+    + [Sequential composition](#sequential-composition)
+    + [Parallel composition](#parallel-composition)
   * [Examples](#examples)
+    + [Sequential composite queries](#sequential-composite-queries)
+    + [Parallel composite queries](#parallel-composite-queries)
     + [Statistics](#statistics)
     + [Laplace mechanism](#laplace-mechanism)
   * [License](#license)
@@ -21,14 +26,80 @@ $ pip install diff-priv-laplace-python
 
 ## Documentation
 
+### Privacy budget
+
 The privacy budget `epsilon` defines how much privacy protection to apply.
 
-  - If `epsilon` is large, less noise will be added, therefore more information leakage exists so less privacy protection will be present.
-  - If `epsilon` is small (must be larger than zero), more noise will be added, therefore less information leakage so more privacy protection will be present.
+  - If `epsilon` is large less noise will be added, therefore more information leakage exists so less privacy protection will be present.
+  - If `epsilon` is small (must be larger than zero) more noise will be added, therefore less information leakage so more privacy protection will be present.
+
+### Sequential composition
+
+When using a data set one tends to issue multiple statistical queries such that one output might be correlated with another. In doing so we reveal more, therefore leak more information so less privacy protection will be present. In order to address this problem, we divide the provided privacy budget into the amount of queries performed creating a query privacy budget. This query privacy budget is then used for each statistic query in order to strengthen the privacy protection.
+
+### Parallel composition
+
+Unlike the pessimistic approach of sequential composition, when using disjoint data sets we assume there isn't any correlation between statistical queries. Therefore, if we have a privacy budget for each query we choose the maximum one and use it for all queries.
 
 For a complete API documentation checkout the [python docs][3].
 
 ## Examples
+
+### Sequential composite queries
+
+#### Perform mean and variance statistic queries for single data slice
+
+```python
+import numpy as np
+from diffpriv_laplace import DiffPrivSequentialStatisticsQuery, DiffPrivStatisticKind
+
+
+epsilon = 0.1
+data = np.array(list(range(0, 20)) + [100.0])
+kinds = DiffPrivStatisticKind.mean | DiffPrivStatisticKind.variance
+results = DiffPrivSequentialStatisticsQuery.query(data, kinds, epsilon)
+```
+
+#### Perform mean and variance statistic queries for multiple data slices
+
+```python
+import numpy as np
+from diffpriv_laplace import DiffPrivSequentialStatisticsQuery, DiffPrivStatisticKind
+
+
+epsilon = 0.1
+data = np.array([list(range(0, 20)) + [100.0]] * 3)
+kinds = [DiffPrivStatisticKind.mean | DiffPrivStatisticKind.variance] * 3
+results = DiffPrivSequentialStatisticsQuery.query(data, kinds, epsilon, axis=1)
+```
+
+### Parallel composite queries
+
+#### Perform mean and variance statistic queries for single data slice
+
+```python
+import numpy as np
+from diffpriv_laplace import DiffPrivParallelStatisticsQuery, DiffPrivStatisticKind
+
+
+epsilon = 0.1
+data = np.array(list(range(0, 20)) + [100.0])
+kinds = DiffPrivStatisticKind.mean | DiffPrivStatisticKind.variance
+results = DiffPrivParallelStatisticsQuery.query(data, kinds, epsilon)
+```
+
+#### Perform mean and variance statistic queries for multiple data slices
+
+```python
+import numpy as np
+from diffpriv_laplace import DiffPrivParallelStatisticsQuery, DiffPrivStatisticKind
+
+
+epsilon = 0.1
+data = np.array([list(range(0, 20)) + [100.0]] * 3)
+kinds = [DiffPrivStatisticKind.mean | DiffPrivStatisticKind.variance] * 3
+results = DiffPrivParallelStatisticsQuery.query(data, kinds, epsilon, axis=1)
+```
 
 ### Statistics
 
