@@ -11,9 +11,12 @@ Implementation of [differential privacy][1] value anonymization using [Laplace m
     + [Privacy budget](#privacy-budget)
     + [Sequential composition](#sequential-composition)
     + [Parallel composition](#parallel-composition)
+    + [Laplace sanitizer](#laplace-sanitizer)
+    + [Python docs](#python-docs)
   * [Examples](#examples)
     + [Sequential composite queries](#sequential-composite-queries)
     + [Parallel composite queries](#parallel-composite-queries)
+    + [Laplace sanitizer application](#laplace-sanitizer-queries)
     + [Statistics](#statistics)
     + [Laplace mechanism](#laplace-mechanism)
   * [License](#license)
@@ -26,12 +29,14 @@ $ pip install diff-priv-laplace-python
 
 ## Documentation
 
+The Laplace mechanism consists of adding noise, generated through the [Laplace distribution](https://en.wikipedia.org/wiki/Laplace_distribution) and the privacy budget, to a value. The derived value is said to be "anonymized" if the privacy budget used is good enough.
+
 ### Privacy budget
 
 The privacy budget `epsilon` defines how much privacy protection to apply.
 
-  - If `epsilon` is large less noise will be added, therefore more information leakage exists so less privacy protection will be present.
-  - If `epsilon` is small (must be larger than zero) more noise will be added, therefore less information leakage so more privacy protection will be present.
+- If `epsilon` is large less noise will be added, therefore more information leakage exists so less privacy protection will be present.
+- If `epsilon` is small (must be larger than zero) more noise will be added, therefore less information leakage so more privacy protection will be present.
 
 ### Sequential composition
 
@@ -40,6 +45,12 @@ When using a data set one tends to issue multiple statistical queries such that 
 ### Parallel composition
 
 Unlike the pessimistic approach of sequential composition, when using disjoint data sets we assume there isn't any correlation between statistical queries. Therefore, if we have a privacy budget for each query we choose the maximum one and use it for all queries.
+
+### Laplace sanitizer
+
+The Laplace sanitizer is an extension to the Laplace mechanism that is usable if it's possible to decompose categorical data into disjoint/independent subsets (e.g. a histogram or a contingency table). Under these circumstances it's possible to use parallel composition statistical queries.
+
+### Python docs
 
 For a complete API documentation checkout the [python docs][3].
 
@@ -99,6 +110,28 @@ epsilon = 0.1
 data = np.array([list(range(0, 20)) + [100.0]] * 3)
 kinds = [DiffPrivStatisticKind.mean | DiffPrivStatisticKind.variance] * 3
 results = DiffPrivParallelStatisticsQuery.query(data, kinds, epsilon, axis=1)
+```
+
+### Laplace sanitizer queries
+
+#### Perform categorical anonymized count
+
+```python
+import numpy as np
+from diffpriv_laplace import DiffPrivLaplaceSanitizer
+
+
+epsilon = 0.1
+data = np.array([0.01, -0.01, 0.03, -0.001, 0.1] * 2)
+
+def selector_positive(data):
+    return data >= 0.0
+
+def selector_negative(data):
+    return data < 0.0
+
+selectors = [selector_positive, selector_negative]
+value = DiffPrivLaplaceSanitizer.count(data, selectors, epsilon)
 ```
 
 ### Statistics
@@ -397,6 +430,7 @@ anonymized = anonymizer.anonymize_variance(value, lower, upper, n)
 Please open an [issue][4] for anything not on this list!
 
 ## License
+
 [MIT][5]
 
 [1]: https://en.wikipedia.org/wiki/Differential_privacy

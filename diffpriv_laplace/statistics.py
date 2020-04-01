@@ -1,14 +1,7 @@
 import numpy as np
 from enum import Flag, auto
 from diffpriv_laplace import DiffPrivLaplaceMechanism
-
-
-class DiffPrivStatisticsInvalidDimensions(Exception):
-    pass
-
-
-class DiffPrivStatisticsSizeMismatch(Exception):
-    pass
+from diffpriv_laplace.exceptions import DiffPrivInvalidDimensions, DiffPrivSizeMismatch
 
 
 class DiffPrivStatisticKind(Flag):
@@ -54,7 +47,7 @@ class DiffPrivStatistics(object):
     """
 
     @classmethod
-    def count(cls, data, epsilon, condition=None, axis=None):
+    def count(cls, data, epsilon, condition=None, axis=None, postprocess=True):
         """
         Performs the count operation and anonymizes the value(s) using the provided
         privacy budget.
@@ -76,6 +69,10 @@ class DiffPrivStatistics(object):
             it should.
         [axis] : int|tuple
             Axis or tuple of axes along which to count non-zeros or non-False value(s).
+        [postprocess] : bool
+            Indicates whether or not to post-process the count values so that the
+            returned value is rounded and within the [0, n] range, where n is the total
+            number of observations.
 
         Returns
         -------
@@ -90,6 +87,12 @@ class DiffPrivStatistics(object):
         anonymized = DiffPrivLaplaceMechanism.anonymize_count_with_budget(
             value, epsilon
         )
+
+        if postprocess:
+            n = np.size(data, axis=axis)
+            anonymized = np.clip(anonymized, 0.0, n)
+            anonymized = np.round(anonymized)
+
         return anonymized
 
     @classmethod
@@ -170,7 +173,7 @@ class DiffPrivStatistics(object):
         return anonymized
 
     @classmethod
-    def proportion(cls, data, epsilon, condition=None, axis=None):
+    def proportion(cls, data, epsilon, condition=None, axis=None, postprocess=True):
         """
         Performs the proportion operation and anonymizes the value(s) using the
         provided privacy budget.
@@ -193,6 +196,9 @@ class DiffPrivStatistics(object):
             it should.
         [axis] : int|tuple
             Axis or tuple of axes along which to count non-zeros or non-False value(s).
+        [postprocess] : bool
+            Indicates whether or not to post-process the proportion values so that the
+            returned value is within the [0.0, 1.0] range.
 
         Returns
         -------
@@ -209,6 +215,10 @@ class DiffPrivStatistics(object):
         anonymized = DiffPrivLaplaceMechanism.anonymize_proportion_with_budget(
             value, n, epsilon
         )
+
+        if postprocess:
+            anonymized = np.clip(anonymized, 0.0, 1.0)
+
         return anonymized
 
     @classmethod
@@ -330,6 +340,63 @@ class DiffPrivStatistics(object):
         return anonymized
 
     @classmethod
+    def calculate_data_slice_statistics(cls, data_slice, kind, epsilon):
+        """
+        Calculates the statistics for a given data slice using a provided
+        privacy budget.
+
+        Parameters
+        ----------
+        data : ndarray
+            The data slice to calculate the anonymized statistic(s) for.
+        kind : DiffPrivStatisticKind
+            The kind of statistics to perform on the data slice.
+        epsilon : float
+            The privacy budget.
+
+        Returns
+        -------
+        dict
+            The dictionary of calculated statistics where keys are of type
+            `DiffPrivStatisticKind` and values are of type `float`.
+
+        """
+        stats = {}
+        if bool(kind & DiffPrivStatisticKind.count):
+            value = cls.count(data_slice, epsilon)
+            stats[DiffPrivStatisticKind.count] = value
+
+        if bool(kind & DiffPrivStatisticKind.min):
+            value = cls.min(data_slice, epsilon)
+            stats[DiffPrivStatisticKind.min] = value
+
+        if bool(kind & DiffPrivStatisticKind.max):
+            value = cls.max(data_slice, epsilon)
+            stats[DiffPrivStatisticKind.max] = value
+
+        if bool(kind & DiffPrivStatisticKind.median):
+            value = cls.median(data_slice, epsilon)
+            stats[DiffPrivStatisticKind.median] = value
+
+        if bool(kind & DiffPrivStatisticKind.proportion):
+            value = cls.proportion(data_slice, epsilon)
+            stats[DiffPrivStatisticKind.proportion] = value
+
+        if bool(kind & DiffPrivStatisticKind.sum):
+            value = cls.sum(data_slice, epsilon)
+            stats[DiffPrivStatisticKind.sum] = value
+
+        if bool(kind & DiffPrivStatisticKind.mean):
+            value = cls.mean(data_slice, epsilon)
+            stats[DiffPrivStatisticKind.mean] = value
+
+        if bool(kind & DiffPrivStatisticKind.variance):
+            value = cls.variance(data_slice, epsilon)
+            stats[DiffPrivStatisticKind.variance] = value
+
+        return stats
+
+    @classmethod
     def apply_kind_on_data_slice(cls, data, kind, epsilon, axis=None):
         """
         Performs the statistic operations for its corresponding data slice using the
@@ -340,9 +407,11 @@ class DiffPrivStatistics(object):
         Parameters
         ----------
         data : list|ndarray
-            The data to retrieve the variance anonymized statistic(s) from.
+            The data to retrieve the anonymized statistic(s) from.
         kind : DiffPrivStatisticKind|list
-            The kind of statistics to perform on each data slice.
+            The kind of statistics to perform on each data slice. If a `None` value
+            is provided the corresponding statistics calculation for the data slice
+            is skipped.
         epsilon : float
             The privacy budget.
         [axis] : int|tuple
@@ -357,9 +426,9 @@ class DiffPrivStatistics(object):
 
         Raises
         ------
-        DiffPrivStatisticsInvalidDimensions
+        DiffPrivInvalidDimensions
             The exception is raised when the data dimension is invalid.
-        DiffPrivStatisticsSizeMismatch
+        DiffPrivSizeMismatch
             The exception is raised when the length of the `kind` list is of different
             size than the amount of data slices in `data` defined through `axis`.
 
@@ -374,7 +443,7 @@ class DiffPrivStatistics(object):
 
         data_dim = np.ndim(data)
         if data_dim != 2:
-            raise DiffPrivStatisticsInvalidDimensions(
+            raise DiffPrivInvalidDimensions(
                 "Invalid data dimension: {}".format(data_dim)
             )
 
@@ -383,7 +452,7 @@ class DiffPrivStatistics(object):
         n = shape[iter_axis]
         kind_len = len(kinds)
         if n != kind_len:
-            raise DiffPrivStatisticsSizeMismatch(
+            raise DiffPrivSizeMismatch(
                 "Data slices and kind have different sizes! [{} != {}]".format(
                     n, kind_len
                 )
@@ -392,40 +461,9 @@ class DiffPrivStatistics(object):
         results = [None] * kind_len
         for index in range(0, kind_len):
             kind = kinds[index]
-            data_slice = np.take(data, [index], axis=iter_axis)
-            stats = {}
-            if bool(kind & DiffPrivStatisticKind.count):
-                value = cls.count(data_slice, epsilon)
-                stats[DiffPrivStatisticKind.count] = value
-
-            if bool(kind & DiffPrivStatisticKind.min):
-                value = cls.min(data_slice, epsilon)
-                stats[DiffPrivStatisticKind.min] = value
-
-            if bool(kind & DiffPrivStatisticKind.max):
-                value = cls.max(data_slice, epsilon)
-                stats[DiffPrivStatisticKind.max] = value
-
-            if bool(kind & DiffPrivStatisticKind.median):
-                value = cls.median(data_slice, epsilon)
-                stats[DiffPrivStatisticKind.median] = value
-
-            if bool(kind & DiffPrivStatisticKind.proportion):
-                value = cls.proportion(data_slice, epsilon)
-                stats[DiffPrivStatisticKind.proportion] = value
-
-            if bool(kind & DiffPrivStatisticKind.sum):
-                value = cls.sum(data_slice, epsilon)
-                stats[DiffPrivStatisticKind.sum] = value
-
-            if bool(kind & DiffPrivStatisticKind.mean):
-                value = cls.mean(data_slice, epsilon)
-                stats[DiffPrivStatisticKind.mean] = value
-
-            if bool(kind & DiffPrivStatisticKind.variance):
-                value = cls.variance(data_slice, epsilon)
-                stats[DiffPrivStatisticKind.variance] = value
-
-            results[index] = stats
+            if kind:
+                data_slice = np.take(data, [index], axis=iter_axis)
+                stats = cls.calculate_data_slice_statistics(data_slice, kind, epsilon)
+                results[index] = stats
 
         return results

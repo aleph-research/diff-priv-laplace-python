@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Differential privacy using Laplace mechanism documentation &#8212; Differential Privacy Laplace Python 1.0.4 documentation</title>
+    <title>Differential privacy using Laplace mechanism documentation &#8212; Differential Privacy Laplace Python 1.0.5 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1.0.4',
+        VERSION:     '1.0.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  false,
@@ -47,6 +47,9 @@
 <h1>Differential privacy using Laplace mechanism documentation<a class="headerlink" href="#differential-privacy-using-laplace-mechanism-documentation" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 </div>
+<p>The Laplace mechanism consists of adding noise, generated through the Laplace distribution
+and the privacy budget, to a value. The derived value is said to be &#8220;anonymized&#8221; if the
+privacy budget used is good enough.</p>
 <div class="section" id="privacy-budget">
 <h2>Privacy budget<a class="headerlink" href="#privacy-budget" title="Permalink to this headline">¶</a></h2>
 <p>The privacy budget <code class="docutils literal"><span class="pre">epsilon</span></code> defines how much privacy protection to apply.</p>
@@ -105,7 +108,9 @@ portion of the defined privacy budget.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>data</strong> (<em>list|ndarray</em>) &#8211; The data to retrieve the anonymized statistic value(s) from.</li>
-<li><strong>kind</strong> (<em>DiffPrivStatisticKind|list</em>) &#8211; The kind of statistics to perform on each data slice.</li>
+<li><strong>kinds</strong> (<em>DiffPrivStatisticKind|list</em>) &#8211; The kind of statistics to perform on each data slice. If a <cite>None</cite> value
+is provided the corresponding statistics calculation for the data slice
+is skipped.</li>
 <li><strong>epsilon</strong> (<em>float</em>) &#8211; The privacy budget.</li>
 <li><strong></strong><strong>[</strong><strong>axis</strong><strong>]</strong><strong></strong> (<em>int|tuple</em>) &#8211; Axis or tuple of axes along which to obtain the anonymized statistic
 value(s).</li>
@@ -119,8 +124,8 @@ value(s).</li>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">DiffPrivStatisticsInvalidDimensions</span></code> &#8211; The exception is raised when the data dimension is invalid.</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">DiffPrivStatisticsSizeMismatch</span></code> &#8211; The exception is raised when the length of the <cite>kind</cite> list is of
+<li><code class="xref py py-exc docutils literal"><span class="pre">DiffPrivInvalidDimensions</span></code> &#8211; The exception is raised when the data dimension is invalid.</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">DiffPrivSizeMismatch</span></code> &#8211; The exception is raised when the length of the <cite>kinds</cite> list is of
 different size than the amount of data slices in <cite>data</cite> defined
 through <cite>axis</cite>.</li>
 </ul>
@@ -200,7 +205,9 @@ the queries.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>data</strong> (<em>list|ndarray</em>) &#8211; The data to retrieve the anonymized statistic value(s) from.</li>
-<li><strong>kind</strong> (<em>DiffPrivStatisticKind|list</em>) &#8211; The kind of statistics to perform on each data slice.</li>
+<li><strong>kinds</strong> (<em>DiffPrivStatisticKind|list</em>) &#8211; The kind of statistics to perform on each data slice. If a <cite>None</cite> value
+is provided the corresponding statistics calculation for the data slice
+is skipped.</li>
 <li><strong>epsilon</strong> (<em>list</em>) &#8211; The privacy budget.</li>
 <li><strong></strong><strong>[</strong><strong>axis</strong><strong>]</strong><strong></strong> (<em>int|tuple</em>) &#8211; Axis or tuple of axes along which to obtain the anonymized statistic
 value(s).</li>
@@ -214,8 +221,8 @@ value(s).</li>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">DiffPrivStatisticsInvalidDimensions</span></code> &#8211; The exception is raised when the data dimension is invalid.</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">DiffPrivStatisticsSizeMismatch</span></code> &#8211; The exception is raised when the length of the <cite>kind</cite> list is of
+<li><code class="xref py py-exc docutils literal"><span class="pre">DiffPrivInvalidDimensions</span></code> &#8211; The exception is raised when the data dimension is invalid.</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">DiffPrivSizeMismatch</span></code> &#8211; The exception is raised when the length of the <cite>kind</cite> list is of
 different size than the amount of data slices in <cite>data</cite> defined
 through <cite>axis</cite>.</li>
 </ul>
@@ -255,6 +262,149 @@ through <cite>axis</cite>.</li>
 </pre></div>
 </div>
 </div>
+<div class="section" id="laplace-sanitizer">
+<h2>Laplace sanitizer<a class="headerlink" href="#laplace-sanitizer" title="Permalink to this headline">¶</a></h2>
+<p>The Laplace sanitizer is an extension to the Laplace mechanism that is usable if it&#8217;s possible
+to decompose categorical data into disjoint/independent subsets (e.g. a histogram or a
+contingency table). Under these circumstances it&#8217;s possible to use parallel composition statistical
+queries.</p>
+<dl class="class">
+<dt id="diffpriv_laplace.DiffPrivLaplaceSanitizer">
+<em class="property">class </em><code class="descclassname">diffpriv_laplace.</code><code class="descname">DiffPrivLaplaceSanitizer</code><a class="headerlink" href="#diffpriv_laplace.DiffPrivLaplaceSanitizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Differential privacy Laplace sanitizer.</p>
+<dl class="classmethod">
+<dt id="diffpriv_laplace.DiffPrivLaplaceSanitizer.constrain_anonymized_counts">
+<em class="property">classmethod </em><code class="descname">constrain_anonymized_counts</code><span class="sig-paren">(</span><em>counts</em>, <em>n</em><span class="sig-paren">)</span><a class="headerlink" href="#diffpriv_laplace.DiffPrivLaplaceSanitizer.constrain_anonymized_counts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constrain the anonymized counts by a defined quantity.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>counts</strong> (<em>ndarray</em>) &#8211; The anonymized counts.</li>
+<li><strong>n</strong> (<em>float</em>) &#8211; The quantity to constrain the values by.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The constrained anonymized counts.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">ndarray</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="diffpriv_laplace.DiffPrivLaplaceSanitizer.count">
+<em class="property">classmethod </em><code class="descname">count</code><span class="sig-paren">(</span><em>data</em>, <em>selectors</em>, <em>epsilon</em>, <em>axis=None</em>, <em>postprocess=True</em><span class="sig-paren">)</span><a class="headerlink" href="#diffpriv_laplace.DiffPrivLaplaceSanitizer.count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs Laplace sanitizer counting by selecting the data into
+independent/disjoint data slice subsets and then applying parallel composition
+on each using the defined privacy budget which should correspond to the
+maximum budget of all the count queries. This process creates a histogram
+for each data slice where the counts correspond to the frequency for each
+category.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> (<em>list|ndarray</em>) &#8211; The data to retrieve the anonymized statistic value(s) from.</li>
+<li><strong>selectors</strong> (<em>list</em>) &#8211; The list of lists of selector functions to apply to the data such that
+each collection of functions in index i is applied to its corresponding
+data slice i. If an entry is is <cite>None</cite>, no selecting is performed.</li>
+<li><strong>epsilon</strong> (<em>list</em>) &#8211; The privacy budget.</li>
+<li><strong></strong><strong>[</strong><strong>axis</strong><strong>]</strong><strong></strong> (<em>int|tuple</em>) &#8211; Axis or tuple of axes along which to obtain the anonymized statistic
+value(s).</li>
+<li><strong></strong><strong>[</strong><strong>postprocess</strong><strong>]</strong><strong></strong> (<em>bool</em>) &#8211; Indicates whether or not to constrain the anonymized count values.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The list of anonymized statistics requested subject to the decomposed
+data.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">ndarray</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><code class="xref py py-exc docutils literal"><span class="pre">DiffPrivInvalidDimensions</span></code> &#8211; The exception is raised when the data dimension is invalid.</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">DiffPrivSizeMismatch</span></code> &#8211; The exception is raised when the length of the <cite>selectors</cite> list is of
+different size than the amount of data slices in <cite>data</cite> defined
+through <cite>axis</cite>.</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">DiffPrivInvalidDecomposition</span></code> &#8211; The exception is raised when there are overlapping elements in the
+decomposed data slice subsets meaning that there is at least one element
+which is present in other subsets. This means that the data slice subsets
+are not independent/disjoint with respect to  each other which is a
+requirement for the Laplace sanitizer.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="diffpriv_laplace.DiffPrivLaplaceSanitizer.decompose_data_slice">
+<em class="property">classmethod </em><code class="descname">decompose_data_slice</code><span class="sig-paren">(</span><em>data</em>, <em>selectors</em><span class="sig-paren">)</span><a class="headerlink" href="#diffpriv_laplace.DiffPrivLaplaceSanitizer.decompose_data_slice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decomposes a data slice into a category subsets of independent/disjoint data
+derived from the provided <cite>selectors</cite>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> (<em>list|ndarray</em>) &#8211; The data slice to split.</li>
+<li><strong>selectors</strong> (<em>list</em>) &#8211; The list of selector functions to apply to the data such that the data
+slice is decomposed into n subsets of the same size, where n is the number
+of decomposing functions. Each selector function should return a boolean
+<cite>ndarray</cite> or <cite>list</cite> where the value is <cite>True</cite> if it belongs to that category
+and <cite>False</cite> otherwise.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The decomposed data slice.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">ndarray</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-exc docutils literal"><span class="pre">DiffPrivInvalidDecomposition</span></code> &#8211; The exception is raised when there are overlapping elements in the
+decomposed data slice subsets meaning that there is at least one element
+which is present in other subsets. This means that the data slice subsets
+are not independent/disjoint with respect to  each other which is a
+requirement for the Laplace sanitizer.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<p>Examples:</p>
+<ul class="simple">
+<li>Perform categorical anonymized count:</li>
+</ul>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">diffpriv_laplace</span> <span class="kn">import</span> <span class="n">DiffPrivLaplaceSanitizer</span>
+
+
+<span class="n">epsilon</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.01</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.03</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">selector_positive</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">data</span> <span class="o">&gt;=</span> <span class="mf">0.0</span>
+
+<span class="k">def</span> <span class="nf">selector_negative</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">data</span> <span class="o">&lt;</span> <span class="mf">0.0</span>
+
+<span class="n">selectors</span> <span class="o">=</span> <span class="p">[</span><span class="n">selector_positive</span><span class="p">,</span> <span class="n">selector_negative</span><span class="p">]</span>
+<span class="n">value</span> <span class="o">=</span> <span class="n">DiffPrivLaplaceSanitizer</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">selectors</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="statistics">
 <h2>Statistics<a class="headerlink" href="#statistics" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
@@ -273,8 +423,10 @@ the same as the amount of data slices that are derived from <cite>axis</cite>.</
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>data</strong> (<em>list|ndarray</em>) &#8211; The data to retrieve the variance anonymized statistic(s) from.</li>
-<li><strong>kind</strong> (<em>DiffPrivStatisticKind|list</em>) &#8211; The kind of statistics to perform on each data slice.</li>
+<li><strong>data</strong> (<em>list|ndarray</em>) &#8211; The data to retrieve the anonymized statistic(s) from.</li>
+<li><strong>kind</strong> (<em>DiffPrivStatisticKind|list</em>) &#8211; The kind of statistics to perform on each data slice. If a <cite>None</cite> value
+is provided the corresponding statistics calculation for the data slice
+is skipped.</li>
 <li><strong>epsilon</strong> (<em>float</em>) &#8211; The privacy budget.</li>
 <li><strong></strong><strong>[</strong><strong>axis</strong><strong>]</strong><strong></strong> (<em>int|tuple</em>) &#8211; Axis or tuple of axes along which to obtain the anonymized statistic
 value(s).</li>
@@ -289,8 +441,8 @@ slice.</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
-<li><code class="xref py py-exc docutils literal"><span class="pre">DiffPrivStatisticsInvalidDimensions</span></code> &#8211; The exception is raised when the data dimension is invalid.</li>
-<li><code class="xref py py-exc docutils literal"><span class="pre">DiffPrivStatisticsSizeMismatch</span></code> &#8211; The exception is raised when the length of the <cite>kind</cite> list is of different
+<li><code class="xref py py-exc docutils literal"><span class="pre">DiffPrivInvalidDimensions</span></code> &#8211; The exception is raised when the data dimension is invalid.</li>
+<li><code class="xref py py-exc docutils literal"><span class="pre">DiffPrivSizeMismatch</span></code> &#8211; The exception is raised when the length of the <cite>kind</cite> list is of different
 size than the amount of data slices in <cite>data</cite> defined through <cite>axis</cite>.</li>
 </ul>
 </td>
@@ -300,8 +452,35 @@ size than the amount of data slices in <cite>data</cite> defined through <cite>a
 </dd></dl>
 
 <dl class="classmethod">
+<dt id="diffpriv_laplace.DiffPrivStatistics.calculate_data_slice_statistics">
+<em class="property">classmethod </em><code class="descname">calculate_data_slice_statistics</code><span class="sig-paren">(</span><em>data_slice</em>, <em>kind</em>, <em>epsilon</em><span class="sig-paren">)</span><a class="headerlink" href="#diffpriv_laplace.DiffPrivStatistics.calculate_data_slice_statistics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the statistics for a given data slice using a provided
+privacy budget.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> (<em>ndarray</em>) &#8211; The data slice to calculate the anonymized statistic(s) for.</li>
+<li><strong>kind</strong> (<em>DiffPrivStatisticKind</em>) &#8211; The kind of statistics to perform on the data slice.</li>
+<li><strong>epsilon</strong> (<em>float</em>) &#8211; The privacy budget.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The dictionary of calculated statistics where keys are of type
+<cite>DiffPrivStatisticKind</cite> and values are of type <cite>float</cite>.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
 <dt id="diffpriv_laplace.DiffPrivStatistics.count">
-<em class="property">classmethod </em><code class="descname">count</code><span class="sig-paren">(</span><em>data</em>, <em>epsilon</em>, <em>condition=None</em>, <em>axis=None</em><span class="sig-paren">)</span><a class="headerlink" href="#diffpriv_laplace.DiffPrivStatistics.count" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="descname">count</code><span class="sig-paren">(</span><em>data</em>, <em>epsilon</em>, <em>condition=None</em>, <em>axis=None</em>, <em>postprocess=True</em><span class="sig-paren">)</span><a class="headerlink" href="#diffpriv_laplace.DiffPrivStatistics.count" title="Permalink to this definition">¶</a></dt>
 <dd><p>Performs the count operation and anonymizes the value(s) using the provided
 privacy budget.</p>
 <p>The operation counts non-zero or non-False values. When a condition
@@ -319,6 +498,9 @@ a list or ndarray of the same size in which for each element is either
 a zero or False when it should not be counted and non-zero or True when
 it should.</li>
 <li><strong></strong><strong>[</strong><strong>axis</strong><strong>]</strong><strong></strong> (<em>int|tuple</em>) &#8211; Axis or tuple of axes along which to count non-zeros or non-False value(s).</li>
+<li><strong></strong><strong>[</strong><strong>postprocess</strong><strong>]</strong><strong></strong> (<em>bool</em>) &#8211; Indicates whether or not to post-process the count values so that the
+returned value is rounded and within the [0, n] range, where n is the total
+number of observations.</li>
 </ul>
 </td>
 </tr>
@@ -438,7 +620,7 @@ privacy budget.</p>
 
 <dl class="classmethod">
 <dt id="diffpriv_laplace.DiffPrivStatistics.proportion">
-<em class="property">classmethod </em><code class="descname">proportion</code><span class="sig-paren">(</span><em>data</em>, <em>epsilon</em>, <em>condition=None</em>, <em>axis=None</em><span class="sig-paren">)</span><a class="headerlink" href="#diffpriv_laplace.DiffPrivStatistics.proportion" title="Permalink to this definition">¶</a></dt>
+<em class="property">classmethod </em><code class="descname">proportion</code><span class="sig-paren">(</span><em>data</em>, <em>epsilon</em>, <em>condition=None</em>, <em>axis=None</em>, <em>postprocess=True</em><span class="sig-paren">)</span><a class="headerlink" href="#diffpriv_laplace.DiffPrivStatistics.proportion" title="Permalink to this definition">¶</a></dt>
 <dd><p>Performs the proportion operation and anonymizes the value(s) using the
 provided privacy budget.</p>
 <p>The operation counts non-zero or non-False values. When a condition
@@ -457,6 +639,8 @@ a list or ndarray of the same size in which for each element is either
 a zero or False when it should not be counted and non-zero or True when
 it should.</li>
 <li><strong></strong><strong>[</strong><strong>axis</strong><strong>]</strong><strong></strong> (<em>int|tuple</em>) &#8211; Axis or tuple of axes along which to count non-zeros or non-False value(s).</li>
+<li><strong></strong><strong>[</strong><strong>postprocess</strong><strong>]</strong><strong></strong> (<em>bool</em>) &#8211; Indicates whether or not to post-process the proportion values so that the
+returned value is within the [0.0, 1.0] range.</li>
 </ul>
 </td>
 </tr>
@@ -1475,6 +1659,7 @@ privacy budget.</p>
 <li><a class="reference internal" href="#privacy-budget">Privacy budget</a></li>
 <li><a class="reference internal" href="#sequential-composition">Sequential composition</a></li>
 <li><a class="reference internal" href="#parallel-composition">Parallel composition</a></li>
+<li><a class="reference internal" href="#laplace-sanitizer">Laplace sanitizer</a></li>
 <li><a class="reference internal" href="#statistics">Statistics</a></li>
 <li><a class="reference internal" href="#laplace-mechanism">Laplace mechanism</a></li>
 </ul>

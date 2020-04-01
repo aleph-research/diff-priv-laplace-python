@@ -59,8 +59,10 @@ class DiffPrivSequentialStatisticsQuery(object):
         ----------
         data : list|ndarray
             The data to retrieve the anonymized statistic value(s) from.
-        kind : DiffPrivStatisticKind|list
-            The kind of statistics to perform on each data slice.
+        kinds : DiffPrivStatisticKind|list
+            The kind of statistics to perform on each data slice. If a `None` value
+            is provided the corresponding statistics calculation for the data slice
+            is skipped.
         epsilon : float
             The privacy budget.
         [axis] : int|tuple
@@ -74,10 +76,10 @@ class DiffPrivSequentialStatisticsQuery(object):
 
         Raises
         ------
-        DiffPrivStatisticsInvalidDimensions
+        DiffPrivInvalidDimensions
             The exception is raised when the data dimension is invalid.
-        DiffPrivStatisticsSizeMismatch
-            The exception is raised when the length of the `kind` list is of
+        DiffPrivSizeMismatch
+            The exception is raised when the length of the `kinds` list is of
             different size than the amount of data slices in `data` defined
             through `axis`.
 

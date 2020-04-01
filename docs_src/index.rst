@@ -5,6 +5,10 @@ Differential privacy using Laplace mechanism documentation
    :maxdepth: 2
    :caption: Contents:
 
+The Laplace mechanism consists of adding noise, generated through the Laplace distribution
+and the privacy budget, to a value. The derived value is said to be "anonymized" if the
+privacy budget used is good enough.
+
 Privacy budget
 --------------
 
@@ -95,6 +99,42 @@ Examples:
   data = np.array([list(range(0, 20)) + [100.0]] * 3)
   kinds = [DiffPrivStatisticKind.mean | DiffPrivStatisticKind.variance] * 3
   results = DiffPrivParallelStatisticsQuery.query(data, kinds, epsilon, axis=1)
+
+
+Laplace sanitizer
+-----------------
+
+The Laplace sanitizer is an extension to the Laplace mechanism that is usable if it's possible
+to decompose categorical data into disjoint/independent subsets (e.g. a histogram or a
+contingency table). Under these circumstances it's possible to use parallel composition statistical
+queries.
+
+.. currentmodule:: diffpriv_laplace
+
+.. autoclass:: DiffPrivLaplaceSanitizer
+    :members:
+
+Examples:
+
+- Perform categorical anonymized count:
+
+.. code-block:: python
+
+  import numpy as np
+  from diffpriv_laplace import DiffPrivLaplaceSanitizer
+
+
+  epsilon = 0.1
+  data = np.array([0.01, -0.01, 0.03, -0.001, 0.1] * 2)
+
+  def selector_positive(data):
+      return data >= 0.0
+
+  def selector_negative(data):
+      return data < 0.0
+
+  selectors = [selector_positive, selector_negative]
+  value = DiffPrivLaplaceSanitizer.count(data, selectors, epsilon)
 
 Statistics
 ----------

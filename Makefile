@@ -1,5 +1,10 @@
 #!make
 
+# Clean pyc
+.PHONY: clean-pyc
+clean-pyc:
+	find . -name "*.pyc" -exec rm -rf {} +
+
 # Run lint
 .PHONY: lint
 lint:

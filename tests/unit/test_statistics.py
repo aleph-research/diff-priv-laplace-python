@@ -3,9 +3,9 @@ import numpy as np
 from itertools import combinations
 from functools import reduce
 from diffpriv_laplace import DiffPrivStatistics, DiffPrivStatisticKind
-from diffpriv_laplace.statistics import (
-    DiffPrivStatisticsInvalidDimensions,
-    DiffPrivStatisticsSizeMismatch,
+from diffpriv_laplace.exceptions import (
+    DiffPrivInvalidDimensions,
+    DiffPrivSizeMismatch,
 )
 
 
@@ -86,6 +86,9 @@ class TestDiffPrivStatistics(unittest.TestCase):
             data, self.epsilon, condition=condition, axis=1
         )
         np.testing.assert_almost_equal(value, expected_values, self.decimal_places)
+
+    def test_count_postprocess(self):
+        pass
 
     def test_min_single(self):
         data = list(range(3, 20))
@@ -222,14 +225,14 @@ class TestDiffPrivStatistics(unittest.TestCase):
         data = np.array([[list(range(0, 20)) + [100.0]]])
         kinds = DiffPrivStatisticKind.all
         self.set_seed()
-        with self.assertRaises(DiffPrivStatisticsInvalidDimensions):
+        with self.assertRaises(DiffPrivInvalidDimensions):
             DiffPrivStatistics.apply_kind_on_data_slice(data, kinds, self.epsilon)
 
     def test_apply_kind_on_data_slice_size_mismatch_error(self):
         data = np.array(list(range(0, 20)) + [100.0])
         kinds = [DiffPrivStatisticKind.all, DiffPrivStatisticKind.all]
         self.set_seed()
-        with self.assertRaises(DiffPrivStatisticsSizeMismatch):
+        with self.assertRaises(DiffPrivSizeMismatch):
             DiffPrivStatistics.apply_kind_on_data_slice(data, kinds, self.epsilon)
 
     def calculate_stats(self, data, axis=None):
@@ -246,6 +249,18 @@ class TestDiffPrivStatistics(unittest.TestCase):
             DiffPrivStatisticKind.variance: np.var(data, axis=axis),
         }
         return stats
+
+    def test_apply_kind_on_data_slice_single_skip(self):
+        data = np.array(list(range(0, 20)) + [100.0])
+        kinds = None
+        expected_results = [None]
+        self.set_seed()
+        results = DiffPrivStatistics.apply_kind_on_data_slice(data, kinds, self.epsilon)
+        self.assertEqual(len(results), len(expected_results))
+        for index in range(len(expected_results)):
+            result = results[index]
+            expected_result = expected_results[index]
+            self.assertEqual(result, expected_result)
 
     def test_apply_kind_on_data_slice_single(self):
         data = np.array(list(range(0, 20)) + [100.0])
@@ -300,6 +315,32 @@ class TestDiffPrivStatistics(unittest.TestCase):
                 expected_value = expected_result[key]
                 self.assertAlmostEqual(value, expected_value, self.decimal_places)
 
+    def test_apply_kind_on_data_slice_multiple_axis_0_skip(self):
+        data = np.array([list(range(0, 20)) + [100.0]] * 3)
+        kinds = [DiffPrivStatisticKind.all, None, DiffPrivStatisticKind.all]
+        expected_results = [
+            self.calculate_stats(data[0]),
+            None,
+            self.calculate_stats(data[2]),
+        ]
+        data = np.transpose(data)
+        self.set_seed()
+        results = DiffPrivStatistics.apply_kind_on_data_slice(
+            data, kinds, self.epsilon, axis=0
+        )
+        self.assertEqual(len(results), len(expected_results))
+        for index in range(len(expected_results)):
+            result = results[index]
+            expected_result = expected_results[index]
+            if expected_result:
+                self.assertEqual(len(result), len(expected_result))
+                for key, value in expected_result.items():
+                    value = result[key]
+                    expected_value = expected_result[key]
+                    self.assertAlmostEqual(value, expected_value, self.decimal_places)
+            else:
+                self.assertEqual(result, expected_result)
+
     def test_apply_kind_on_data_slice_multiple_axis_0(self):
         data = np.array([list(range(0, 20)) + [100.0]] * 3)
         kinds = [DiffPrivStatisticKind.all] * 3
@@ -322,6 +363,31 @@ class TestDiffPrivStatistics(unittest.TestCase):
                 value = result[key]
                 expected_value = expected_result[key]
                 self.assertAlmostEqual(value, expected_value, self.decimal_places)
+
+    def test_apply_kind_on_data_slice_multiple_axis_1_skip(self):
+        data = np.array([list(range(0, 20)) + [100.0]] * 3)
+        kinds = [DiffPrivStatisticKind.all, None, DiffPrivStatisticKind.all]
+        expected_results = [
+            self.calculate_stats(data[0]),
+            None,
+            self.calculate_stats(data[2]),
+        ]
+        self.set_seed()
+        results = DiffPrivStatistics.apply_kind_on_data_slice(
+            data, kinds, self.epsilon, axis=1
+        )
+        self.assertEqual(len(results), len(expected_results))
+        for index in range(len(expected_results)):
+            result = results[index]
+            expected_result = expected_results[index]
+            if expected_result:
+                self.assertEqual(len(result), len(expected_result))
+                for key, value in expected_result.items():
+                    value = result[key]
+                    expected_value = expected_result[key]
+                    self.assertAlmostEqual(value, expected_value, self.decimal_places)
+            else:
+                self.assertEqual(result, expected_result)
 
     def test_apply_kind_on_data_slice_multiple_axis_1(self):
         data = np.array([list(range(0, 20)) + [100.0]] * 3)
