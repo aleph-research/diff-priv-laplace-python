@@ -6,7 +6,7 @@ cov-core==1.7
 coverage==3.7.1
 flake8-black==0.1.1
 mock==1.0.1
-py==1.4.32
+py==1.10.0
 pytest==2.9.2
 pytest-cov==1.6
 sphinx==1.5.2
