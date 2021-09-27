@@ -23,7 +23,9 @@ class TestDiffPrivLaplaceSanitizer(unittest.TestCase):
 
     def test_decompose_data_slice_two_selectors(self):
         data = np.array([0.1, -0.1, 0.1, 0.1] * 10)
-        expected_result = np.array([data >= 0, data < 0],)
+        expected_result = np.array(
+            [data >= 0, data < 0],
+        )
 
         def selector_positive(data):
             return data >= 0
