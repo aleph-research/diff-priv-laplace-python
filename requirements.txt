@@ -1,5 +1,5 @@
 ##### Dependencies
-numpy==1.18.2
+numpy==1.22.0
 
 ##### DEV Dependencies
 cov-core==1.7
